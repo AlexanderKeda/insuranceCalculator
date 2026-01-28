@@ -7,6 +7,7 @@ import org.javaguru.travel.insurance.core.api.command.TravelCalculatePremiumCore
 import org.javaguru.travel.insurance.core.api.dto.AgreementDTO;
 import org.javaguru.travel.insurance.core.api.dto.ValidationErrorDTO;
 import org.javaguru.travel.insurance.core.domain.entities.AgreementEntity;
+import org.javaguru.travel.insurance.core.messagebroker.ProposalGeneratorQueueSender;
 import org.javaguru.travel.insurance.core.validations.TravelAgreementValidator;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ class TravelCalculatePremiumServiceImpl implements TravelCalculatePremiumService
     private final AgreementPremiumCalculator agreementPremiumCalculator;
     private final TravelAgreementValidator agreementValidator;
     private final AgreementEntityFactory agreementEntityFactory;
+    private final ProposalGeneratorQueueSender proposalGeneratorQueueSender;
 
     @Override
     public TravelCalculatePremiumCoreResult calculatePremium(TravelCalculatePremiumCoreCommand command) {
@@ -28,6 +30,7 @@ class TravelCalculatePremiumServiceImpl implements TravelCalculatePremiumService
         if (errors.isEmpty()) {
             var result = buildCoreResult(command.agreement());
             saveAgreement(result.agreement());
+            proposalGeneratorQueueSender.send(result.agreement());
             return result;
         } else {
             return buildCoreResult(errors);
