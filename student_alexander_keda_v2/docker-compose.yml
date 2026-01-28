@@ -7,6 +7,15 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=12345
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "check_running" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
   db:
     container_name: mysql-container
@@ -21,6 +30,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+      start_period: 20s
 
   insurance-calculator-app:
     container_name: insurance-calc-container
@@ -29,6 +39,6 @@ services:
       - "8080:8080"
     depends_on:
       message-broker:
-        condition: service_started
+        condition: service_healthy
       db:
         condition: service_healthy

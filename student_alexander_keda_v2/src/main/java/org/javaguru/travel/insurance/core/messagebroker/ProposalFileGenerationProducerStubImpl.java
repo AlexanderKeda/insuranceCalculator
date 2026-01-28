@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile({"h2", "mysql-local", "mysql-container"})
+@Profile({"h2", "mysql-local"})
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @Slf4j
-class ProposalGeneratorQueueSenderStubImpl implements ProposalGeneratorQueueSender {
+class ProposalFileGenerationProducerStubImpl implements ProposalFileGenerationProducer {
 
     private final ObjectMapper objectMapper;
 
