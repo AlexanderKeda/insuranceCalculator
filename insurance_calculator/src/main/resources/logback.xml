@@ -6,7 +6,7 @@
     </appender>
 
     <appender name="FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>student_alexander_keda/logs/app.log</file>
+        <file>logs/app.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <maxFileSize>10MB</maxFileSize>
             <fileNamePattern>logs/app-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
@@ -19,7 +19,7 @@
     </appender>
 
     <appender name="REQUEST-RESPONSE_FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>student_alexander_keda/logs/app_request-response.log</file>
+        <file>logs/app_request-response.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <maxFileSize>10MB</maxFileSize>
             <fileNamePattern>logs/app_request-response-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
