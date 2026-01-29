@@ -42,3 +42,10 @@ services:
         condition: service_healthy
       db:
         condition: service_healthy
+
+  doc-generator-app:
+    container_name: doc-generator-container
+    image: doc-generator:0.0.1
+    depends_on:
+      message-broker:
+        condition: service_healthy

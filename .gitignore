@@ -31,6 +31,5 @@
 *.ipr
 
 
-/student_alexander_keda_v1/documentation
-/student_alexander_keda_v2/documentation
-/student_alexander_keda_v2/export
+/insurance_calculator/documentation
+/insurance_calculator/export

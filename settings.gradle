@@ -1,1 +1,3 @@
 include 'insurance_calculator'
+include 'doc_generator'
+

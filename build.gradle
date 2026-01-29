@@ -42,3 +42,18 @@ subprojects {
 	}
 
 }
+
+
+tasks.register("dockerComposeUp", Exec) {
+	group = 'docker'
+
+	dependsOn ':insurance_calculator:docker'
+	dependsOn ':doc_generator:docker'
+	commandLine  "docker", "compose", "up"
+}
+
+tasks.register("dockerComposeDown", Exec) {
+	group = 'docker'
+
+	commandLine  "docker", "compose", "down"
+}
