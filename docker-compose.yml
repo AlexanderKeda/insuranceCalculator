@@ -5,7 +5,6 @@ services:
     container_name: rabbitmq-container
     image: rabbitmq:3-management
     ports:
-      - "5672:5672"
       - "15672:15672"
     environment:
       - RABBITMQ_DEFAULT_USER=user
@@ -37,6 +36,12 @@ services:
     image: insurance-calculator:1.0.3
     ports:
       - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
     depends_on:
       message-broker:
         condition: service_healthy
@@ -48,4 +53,6 @@ services:
     image: doc-generator:0.0.1
     depends_on:
       message-broker:
+        condition: service_healthy
+      insurance-calculator-app:
         condition: service_healthy

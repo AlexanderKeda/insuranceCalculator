@@ -3,7 +3,7 @@ package org.javaguru.travel.insurance.core.messagebroker;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.javaguru.travel.insurance.config.RabbitMQConfig;
+import org.javaguru.travel.insurance.config.RabbitMqConfig;
 import org.javaguru.travel.insurance.core.api.dto.AgreementDTO;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Profile;
@@ -19,7 +19,7 @@ class ProposalFileGenerationProducerImpl implements ProposalFileGenerationProduc
 
     @Override
     public void send(AgreementDTO agreement) {
-            rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME, RabbitMQConfig.ROUTING_KEY, agreement);
+            rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_NAME, RabbitMqConfig.ROUTING_KEY, agreement);
             log.info("Send the agreement with UUID {} to the queue", agreement.uuid());
     }
 }
