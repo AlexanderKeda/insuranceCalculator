@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+
+    <style>
+        body {
+            font-family: "Liberation Sans", "DejaVu Sans", sans-serif;
+            font-size: 12px;
+            color: #000;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            margin-top: 12px;
+            margin-bottom: 6px;
+        }
+
+        .section {
+            margin-bottom: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 6px;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<h1>Insurance Agreement</h1>
+
+<div class="section">
+    <p>
+        <b>Agreement ID:</b>
+        <span th:text="${agreement.uuid}"></span>
+    </p>
+
+    <p>
+        <b>Validity period:</b>
+        <span th:text="${#temporals.format(agreement.agreementDateFrom, 'dd.MM.yyyy')}"></span>
+        –
+        <span th:text="${#temporals.format(agreement.agreementDateTo, 'dd.MM.yyyy')}"></span>
+    </p>
+
+    <p>
+        <b>Country:</b>
+        <span th:text="${agreement.country}"></span>
+    </p>
+</div>
+
+<!-- ================= SELECTED RISKS ================= -->
+
+<div class="section">
+    <h2>Selected Risks</h2>
+
+    <ul>
+        <li th:each="risk : ${agreement.selectedRisks}"
+            th:text="${risk}">
+        </li>
+    </ul>
+</div>
+
+<!-- ================= INSURED PERSONS ================= -->
+
+<div class="section">
+    <h2>Insured Persons</h2>
+
+    <div th:each="person, stat : ${agreement.persons}">
+        <h3>
+            Person <span th:text="${stat.index + 1}"></span>
+        </h3>
+
+        <p>
+            <b>Name:</b>
+            <span th:text="${person.personFirstName}"></span>
+            <span th:text="${person.personLastName}"></span>
+        </p>
+
+        <p>
+            <b>Personal Code:</b>
+            <span th:text="${person.personCode}"></span>
+        </p>
+
+        <p>
+            <b>Date of Birth:</b>
+            <span th:text="${#temporals.format(person.personBirthDate, 'dd.MM.yyyy')}"></span>
+        </p>
+
+        <p>
+            <b>Medical Risk Level:</b>
+            <span th:text="${person.medicalRiskLimitLevel}"></span>
+        </p>
+
+        <!-- ===== PERSON RISKS ===== -->
+
+        <table>
+            <thead>
+            <tr>
+                <th>Risk IC</th>
+                <th class="text-right">Premium</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="risk : ${person.risks}">
+                <td th:text="${risk.riskIc}"></td>
+                <td class="text-right"
+                    th:text="${risk.premium != null ? #numbers.formatDecimal(risk.premium, 1, 'NONE', 2, 'POINT') : '0.00'}">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ================= TOTAL ================= -->
+
+<div class="section">
+    <h2>Total Premium</h2>
+
+    <p>
+        <b>Total Agreement Premium:</b>
+        <span th:text="${agreement.agreementPremium != null ? #numbers.formatDecimal(agreement.agreementPremium, 1, 'NONE', 2, 'POINT') : '0.00'}"></span>
+    </p>
+</div>
+
+</body>
+</html>

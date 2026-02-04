@@ -51,6 +51,8 @@ services:
   doc-generator-app:
     container_name: doc-generator-container
     image: doc-generator:0.0.1
+    volumes:
+      - ./doc_generator/docs/proposals:/app/docs/proposals
     depends_on:
       message-broker:
         condition: service_healthy
