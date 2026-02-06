@@ -49,6 +49,7 @@ tasks.register("dockerComposeUp", Exec) {
 
 	dependsOn ':insurance_calculator:docker'
 	dependsOn ':doc_generator:docker'
+	dependsOn ':black_list:docker'
 	commandLine  "docker", "compose", "up"
 }
 

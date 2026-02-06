@@ -51,11 +51,20 @@ services:
 
   doc-generator-app:
     container_name: doc-generator-container
-    image: doc-generator:0.0.1
+    image: doc-generator:1.0.1
     volumes:
       - ./doc_generator/docs/proposals:/app/docs/proposals
     depends_on:
       message-broker:
         condition: service_healthy
+      insurance-calculator-app:
+        condition: service_healthy
+
+  black-list-app:
+    container_name: black-list-container
+    image: black-list:1.0.1
+    ports:
+      - "8081:8080"
+    depends_on:
       insurance-calculator-app:
         condition: service_healthy
