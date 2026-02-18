@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.javaguru.travel.insurance.core.api.dto.AgreementDTO;
 import org.javaguru.travel.insurance.core.api.dto.PersonDTO;
 import org.javaguru.travel.insurance.core.api.dto.ValidationErrorDTO;
+import org.javaguru.travel.insurance.core.validations.blacklist.PersonBlacklistValidator;
 import org.javaguru.travel.insurance.core.validations.person.TravelPersonFieldsValidation;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import java.util.stream.Stream;
 class TravelPersonFieldsValidator {
 
     private final List<TravelPersonFieldsValidation> personFieldsValidations;
+    private final PersonBlacklistValidator personBlacklistValidator;
 
     List<ValidationErrorDTO> validate(AgreementDTO agreement) {
         return agreement != null && agreement.persons() != null
@@ -34,8 +36,10 @@ class TravelPersonFieldsValidator {
     private List<ValidationErrorDTO> collectPersonErrors(AgreementDTO agreement ,PersonDTO person) {
         List<ValidationErrorDTO> singleErrors = collectSingleErrors(agreement, person);
         List<ValidationErrorDTO> listErrors = collectListErrors(agreement, person);
-
-        return concatenateLists(singleErrors, listErrors);
+        List<ValidationErrorDTO> fieldsErrors = concatenateLists(singleErrors, listErrors);
+        return fieldsErrors.isEmpty()
+                ? personBlacklistValidator.validate(person)
+                : fieldsErrors;
     }
 
     private List<ValidationErrorDTO> collectSingleErrors(AgreementDTO agreement, PersonDTO person) {

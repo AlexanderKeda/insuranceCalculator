@@ -3,6 +3,7 @@ package org.javaguru.travel.insurance.core.validations;
 import org.javaguru.travel.insurance.core.api.dto.AgreementDTO;
 import org.javaguru.travel.insurance.core.api.dto.PersonDTO;
 import org.javaguru.travel.insurance.core.api.dto.ValidationErrorDTO;
+import org.javaguru.travel.insurance.core.validations.blacklist.PersonBlacklistValidator;
 import org.javaguru.travel.insurance.core.validations.person.TravelPersonFieldsValidation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,6 +25,8 @@ class TravelPersonFieldsValidatorTest {
     private TravelPersonFieldsValidation validation1Mock;
     @Mock
     private TravelPersonFieldsValidation validation2Mock;
+    @Mock
+    private PersonBlacklistValidator blacklistValidator;
 
     private TravelPersonFieldsValidator personFieldsValidator;
 
@@ -40,7 +44,7 @@ class TravelPersonFieldsValidatorTest {
     @BeforeEach
     void setUp() {
         var validations = List.of(validation1Mock, validation2Mock);
-        personFieldsValidator = new TravelPersonFieldsValidator(validations);
+        personFieldsValidator = new TravelPersonFieldsValidator(validations, blacklistValidator);
         persons = List.of(person1Mock, person2Mock);
     }
 
@@ -65,6 +69,7 @@ class TravelPersonFieldsValidatorTest {
                 .thenReturn(List.of());
 
         when(agreement.persons()).thenReturn(persons);
+        when(blacklistValidator.validate(any())).thenReturn(List.of());
 
         var errors = personFieldsValidator.validate(agreement);
         assertTrue(errors.isEmpty());
